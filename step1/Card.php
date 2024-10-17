@@ -1,47 +1,48 @@
 <?php
 
-namespace TrumpWar\Step4;
+namespace TrumpWar\Step1;
 
-//デッキを生成するクラス
-class Deck
+class Card
 {
-    //カードインスタンスを格納する配列、53枚入り(ジョーカーはあり)
-    private $cards = [];
-    private const TOTAL_CARDS = 53;
+    public const CARD_STRENGTH = [
+        '2' => 1,
+        '3' => 2,
+        '4' => 3,
+        '5' => 4,
+        '6' => 5,
+        '7' => 6,
+        '8' => 7,
+        '9' => 8,
+        '10' => 9,
+        'J' => 10,
+        'Q' => 11,
+        'K' => 12,
+        'A' => 13
+    ];
 
-    public function __construct()
+    public const SUIT_NAME = [
+        'H' => 'ハート',
+        'C' => 'クローバー',
+        'D' => 'ダイヤ',
+        'S' => 'スペード'
+    ];
+
+    public function __construct(private string $suit, private string $number)
     {
-        foreach (['S','D','C','H'] as $suit) {
-            foreach (array_keys(Card::CARD_STRENGTH) as $number) {
-                $card = new Card($suit, $number);
-                $this->cards[] = $card;
-            }
-        }
-        $this->cards[] = new Card('J', '14');
     }
 
-    //デッキをシャッフルする関数
-    public function suffleCards(): void
+    public function getSuit(): string
     {
-        shuffle($this->cards);
+        return $this->suit;
     }
 
-    //デッキをプレーヤー人数分分割する関数
-    public function chunkDeck(array $players)
+    public function getNumber(): string
     {
-        $playersCount = count($players);
-        $chunkArray = array_fill(0, $playersCount, []);
-
-        foreach ($this->cards as $index => $card) {
-            $chunkArray[$index % $playersCount][] = $card;
-        }
-
-        return $chunkArray;
+        return $this->number;
     }
 
-    //カードを返す関数
-    public function getCards(): array
+    public function getStrong()
     {
-        return $this->cards;
+        return self::CARD_STRENGTH[$this->number];
     }
 }
